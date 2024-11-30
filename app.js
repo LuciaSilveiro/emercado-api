@@ -11,13 +11,45 @@ const puerto = 3000;
 app.use(express.json());
 app.use(cors());
 
-// Ruta para devolver los datos de gatos
+// Pauta 2
+
 app.get("/cats", (req, res) => {
   const filePath = path.join(__dirname, "data/cats/cat.json");
   res.sendFile(filePath);
 });
 
-// Ruta de login
+app.get("/cart", (req, res) => {
+  const filePath = path.join(__dirname, "data/cart/buy.json");
+  res.sendFile(filePath);
+});
+
+app.get("/products/:id", (req, res) => {
+  const filePath = path.join(__dirname, `data/products/${req.params.id}.json`);
+  res.sendFile(filePath);
+});
+
+app.get("/cats_products/:id", (req, res) => {
+  const filePath = path.join(__dirname, `data/cats_products/${req.params.id}.json`);
+  res.sendFile(filePath);
+});
+
+app.get("/products_comments/:id", (req, res) => {
+  const filePath = path.join(__dirname, `data/products_comments/${req.params.id}.json`);
+  res.sendFile(filePath);
+});
+
+app.get("/sell", (req, res) => {
+  const filePath = path.join(__dirname, "data/sell/publish.json");
+  res.sendFile(filePath);
+});
+
+app.get("/user_cart", (req, res) => {
+  const filePath = path.join(__dirname, "data/user_cart/25801.json");
+  res.sendFile(filePath);
+});
+
+// Pauta 3 
+
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
 
@@ -29,7 +61,9 @@ app.post("/login", (req, res) => {
   }
 });
 
-// Middleware para proteger las rutas de /people
+
+// Pauta 4
+
 app.use("/people", (req, res, next) => {
   try {
     const token = req.headers["access-token"];
@@ -41,11 +75,12 @@ app.use("/people", (req, res, next) => {
   }
 });
 
-// Ruta para devolver los datos de personas
+
 app.get("/people", (req, res) => {
   const filePath = path.join(__dirname, "data/people/people.json");
 
-  // Verifica si el archivo existe antes de enviarlo
+
+ 
   fs.readFile(filePath, "utf8", (err, data) => {
     if (err) {
       return res.status(404).json({ message: "Archivo no encontrado" });
@@ -54,13 +89,13 @@ app.get("/people", (req, res) => {
   });
 });
 
-// Ruta para devolver productos específicos
+
 app.get("/products/:id", (req, res) => {
   const filePath = path.join(__dirname, `data/products/${req.params.id}.json`);
   res.sendFile(filePath);
 });
 
-// Iniciar servidor
+
 app.listen(puerto, () => {
   console.log(`Servidor corriendo en http://localhost:${puerto}`);
 });
